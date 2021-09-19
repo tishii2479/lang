@@ -44,48 +44,11 @@ struct Token {
   int val;
   std::string str;
 
-  Token(TokenKind _kind, std::string _str) {
-    kind = _kind;
-    str = _str;
-  }
-
-  Token(TokenKind _kind, char c) {
-    kind = _kind;
-    str = std::string{c};
-  }
+  Token(TokenKind kind, std::string str) : kind(kind), str(str) {}
+  Token(TokenKind kind, char c) : Token(kind, std::string{c}) {}
 };
 
 std::list<Token> token_list;
-
-enum NodeKind {
-  ND_ADD,
-  ND_SUB,
-  ND_MUL,
-  ND_DIV,
-  ND_NUM,
-};
-
-struct Node {
-  NodeKind kind;
-  Node *lhs;
-  Node *rhs;
-  int val;
-};
-
-Node *new_node(NodeKind kind, Node *lhs, Node *rhs) {
-  Node *node = (Node *)calloc(1, sizeof(Node));
-  node->kind = kind;
-  node->lhs = lhs;
-  node->rhs = rhs;
-  return node;
-}
-
-Node *new_node_num(int val) {
-  Node *node = (Node *)calloc(1, sizeof(Node));
-  node->kind = ND_NUM;
-  node->val = val;
-  return node;
-}
 
 bool consume(std::list<Token>::iterator &it, char op) {
   if ((*it).kind != TK_RESERVED || (*it).str[0] != op)
@@ -115,6 +78,25 @@ long _strtol(std::string &s, int &ptr) {
   ptr--;
   return cur;
 }
+
+enum NodeKind {
+  ND_ADD,
+  ND_SUB,
+  ND_MUL,
+  ND_DIV,
+  ND_NUM,
+};
+
+struct Node {
+  NodeKind kind;
+  Node *lhs;
+  Node *rhs;
+  int val;
+
+  Node(NodeKind kind, Node *lhs, Node *rhs, int val) : kind(kind), lhs(lhs), rhs(rhs), val(val) {}
+  Node(NodeKind kind, Node *lhs, Node *rhs) : Node(kind, lhs, rhs, 0) {}
+  Node(int val) : Node(ND_NUM, nullptr, nullptr, val) {}
+};
 
 std::list<Token> tokenize(std::string s) {
   std::list<Token> token_list;
