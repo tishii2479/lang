@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-std=c++17 -Wall
 
 main: main.cpp
-	CC -o main main.cpp
+	$(CC) $(CFLAGS) -o main main.cpp
 test: main
 	./test.sh
 clean:
