@@ -20,5 +20,6 @@ assert 0 0
 assert 42 42
 assert 21 "5+20-4"
 assert 31 " 5 + 30 -  4 "
+# assert 6 "30 / 5"
 
 echo OK
